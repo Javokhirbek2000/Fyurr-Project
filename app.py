@@ -65,6 +65,7 @@ class Venue(db.Model):
     website_link = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean)
     seeking_description = db.Column(db.String(500))
+    shows = db.relationship('Show', backref='venue', lazy=True)
 
     def __repr__(self):
         return f'<Venue {self.id} {self.name}>'
@@ -316,7 +317,7 @@ def create_venue_submission():
           print("Error happened while creating venue submission")
           abort(500)
 
-@app.route('/venues/<venue_id>', methods=['DELETE', 'GET'])
+@app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
   venue = Venue.query.get(venue_id)
   
@@ -676,7 +677,8 @@ def create_artist_submission():
       else:
           flash('An error occurred. Artist ' + name + ' could not be listed.')
           print("Error in create_artist_submission()")
-          abort()
+          abort(500)
+          
 
   
 
